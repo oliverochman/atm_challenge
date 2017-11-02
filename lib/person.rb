@@ -1,6 +1,5 @@
 class Person
-  attr_reader :name, :account
-  attr_accessor :cash
+  attr_accessor :cash, :name, :account
 
   def initialize(name = nil)
     set_name(name)
@@ -18,6 +17,10 @@ class Person
     else
       deposit_cash(amount)
     end
+  end
+
+  def withdraw(args = {})
+    @account == nil ? missing_account : withdraw_funds(args)
   end
 
   private
@@ -39,7 +42,20 @@ class Person
     @account.balance += amount
   end
 
+  def withdraw_funds(args)
+    args[:atm] == nil ? missing_atm : atm = args[:atm]
+    account = @account
+    amount = args[:amount]
+    pin = args[:pin]
+    response = atm.withdraw(amount, pin, account)
+    response[:status] == true ? increase_cash(response) : response
+  end
+
+  def increase_cash(response)
+    @cash += response[:amount]
+  end
+
   def missing_account
-    raise 'No account present'
+    raise RuntimeError, 'No account present'
   end
 end
