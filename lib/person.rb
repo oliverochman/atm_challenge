@@ -1,3 +1,7 @@
+require './lib/atm'
+require './lib/account'
+
+
 class Person
   attr_accessor :cash, :name, :account
 
